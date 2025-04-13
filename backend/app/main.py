@@ -3,7 +3,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from backend.app.api.register import router as register_user
 from backend.app.api.login import router as login_user
 
-
 app = FastAPI()
 
 

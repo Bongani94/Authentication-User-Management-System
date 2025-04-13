@@ -12,3 +12,5 @@ geopy
 pyjwt
 httpx
 pydantic-settings
+psycopg2-binary
+
