@@ -1,9 +1,10 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, EmailStr, constr
+from typing import Annotated
 
 
 class LoginRequest(BaseModel):
-    email: str = Field(..., min_length=5, max_length=50)
-    password: str = Field(..., min_length=8, max_length=50)
+    email: EmailStr
+    password: Annotated[str, constr(min_length=8)]
 
     model_config = {
     "from_attributes": True

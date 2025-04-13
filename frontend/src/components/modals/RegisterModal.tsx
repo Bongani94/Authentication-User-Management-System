@@ -7,16 +7,11 @@ import api from "@/lib/api";
 type FormType = {
   first_name: string;
   last_name: string;
-  phone_number: string;
   country: string;
-  profile_picture?: string;
-  role: string;
+  phone_number: string;
   email: string;
   password: string;
   confirm_password: string;
-  terms_and_conditions: string;
-  created_at?: string;
-  updated_at?: string;
 };
 
 export default function RegisterModal({
@@ -31,11 +26,9 @@ export default function RegisterModal({
     last_name: "",
     phone_number: "",
     country: "",
-    role: "",
     email: "",
     password: "",
-    confirm_password: "",
-    terms_and_conditions: ""
+    confirm_password: ""
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -108,27 +101,7 @@ export default function RegisterModal({
           required
           className="w-full p-2 border backdrop-blur border-blue-300 shadow-md rounded hover:bg-blue-100/10 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:ring-opacity-50"
         />
-        <input
-            name="profile_picture"
-            type="file"
-            accept="image/*"
-            onChange={(e) => {
-              const file = e.target.files?.[0];
-              if (file) {
-                setForm({ ...form, profile_picture: URL.createObjectURL(file) });
-              }
-            }}
-            className="w-full p-2 border backdrop-blur border-blue-300 shadow-md rounded hover:bg-blue-100/10 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:ring-opacity-50"
-            />
-        <input
-          name="role"
-          type="text"
-          placeholder="Role"
-          value={form.role}
-          onChange={update}
-          required
-          className="w-full p-2 border backdrop-blur border-blue-300 shadow-md rounded hover:bg-blue-100/10 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:ring-opacity-50"
-        />
+     
         <input
           name="password"
           type="password"
@@ -147,15 +120,6 @@ export default function RegisterModal({
           required
           className="w-full p-2 border backdrop-blur border-blue-300 shadow-md rounded hover:bg-blue-100/10 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:ring-opacity-50"
         />
-        
-         <input
-          name="terms_and_conditions"
-          type="checkbox"
-          required
-          className="mr-2 accent-blue-300/10 bg-blue-100"/>
-          <label htmlFor="terms_and_conditions" className="text-sm">
-          I agree to the terms and conditions
-        </label>
         <button
           type="submit"
           className="w-full bg-blue-600/30 text-white py-2 rounded hover:bg-blue-700/10 transition"

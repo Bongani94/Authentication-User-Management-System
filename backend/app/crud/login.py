@@ -1,4 +1,4 @@
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 from passlib.context import CryptContext
 from ..models.login import User
 from ..schemas.login import LoginRequest
@@ -6,10 +6,10 @@ from fastapi import HTTPException, status
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-def verify_password(plain_password: str, hashed_password: str) -> bool:
+async def verify_password(plain_password: str, hashed_password: str) -> bool:
     return pwd_context.verify(plain_password, hashed_password)
 
-def authenticate_user(db: Session, login_data: LoginRequest):
+async def authenticate_user(db: AsyncSession, login_data: LoginRequest):
     user = db.query(User).filter(User.email == login_data.email).first()
     if not user:
         raise HTTPException(

@@ -1,21 +1,22 @@
-from pydantic import BaseModel, Field
-from typing import Optional
+from pydantic import BaseModel, EmailStr, constr, model_validator
+from typing import Annotated
 
 
 class UserRegisterSchema(BaseModel):
-    first_name: str = Field(..., min_length=3, max_length=50)
-    last_name: str = Field(..., min_length=3, max_length=50)
-    phone_number: str = Field(..., min_length=10, max_length=15)
-    country: str = Field(..., min_length=3, max_length=50)
-    profile_picture: Optional[str] = None
-    role: str = Field(..., min_length=3, max_length=50)
-    email: str = Field(..., min_length=5, max_length=50)
-    password: str = Field(..., min_length=8, max_length=50)
-    confirm_password: str = Field(..., min_length=8, max_length=50)
-    terms_and_conditions: bool = Field(..., description="Accept terms and conditions")
-    created_at: Optional[str] = None
-    updated_at: Optional[str] = None
+    first_name: str
+    last_name: str
+    phone_number: str
+    country: str
+    email: EmailStr
+    password: Annotated[str, constr(min_length=8)]
+    confirm_password: Annotated[str, constr(min_length=8)]
     
     model_config = {
     "from_attributes": True
     }
+    
+    @model_validator(mode="after")
+    def check_passwords_match(self):
+        if self.password != self.confirm_password:
+            raise ValueError("Passwords do not match")
+        return self

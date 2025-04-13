@@ -1,40 +1,19 @@
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 from ..models.register import UserRegister
 from ..schemas.register import UserRegisterSchema
-from ..core.security import get_password_hash
-from fastapi import HTTPException, status
+from fastapi import HTTPException
+from sqlalchemy.future import select
+from sqlalchemy.exc import NoResultFound
 
-def create_user(db: Session, user_data: UserRegisterSchema):
+async def create_user(db: AsyncSession, user_data: UserRegisterSchema):
     # Check if user already exists
-    existing_user = db.query(UserRegister).filter(UserRegister.email == user_data.email).first()
+    result = await db.execute(select(UserRegister).where(UserRegister.email == user_data.email))
+    existing_user = result.scalar_one_or_none()
     if existing_user:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Email is already registered"
-        )
+        raise HTTPException(status_code=400, detail="Email already registered")
 
-    # Hash the password
-    hashed_password = get_password_hash(user_data.password)
-
-    # Create new user instance
-    new_user = UserRegister(
-        first_name=user_data.first_name,
-        last_name=user_data.last_name,
-        email=user_data.email,
-        phone_number=user_data.phone_number,
-        profile_picture=user_data.profile_picture,
-        role=user_data.role,
-        country=user_data.country,
-        hashed_password=hashed_password,
-        confirm_password=user_data.confirm_password,
-        terms_and_conditions=user_data.terms_and_conditions,
-        is_active=False,  
-        is_verified=False,
-    )
-
-    # Add user to DB and commit
+    new_user = UserRegister(**user_data.dict())
     db.add(new_user)
-    db.commit()
-    db.refresh(new_user)
-
+    await db.commit()
+    await db.refresh(new_user)
     return new_user
