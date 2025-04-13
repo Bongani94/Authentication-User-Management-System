@@ -2,7 +2,6 @@ fastapi
 uvicorn
 sqlalchemy
 asyncpg
-pydantic
 passlib[bcrypt]
 python-jose[cryptography]
 fastapi-mail
@@ -12,3 +11,4 @@ redis
 geopy
 pyjwt
 httpx
+pydantic-settings

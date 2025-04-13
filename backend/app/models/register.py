@@ -16,7 +16,7 @@ class UserRegister(Base):
     profile_picture = Column(String, nullable=True)
     role = Column(String, nullable=False)
     email = Column(String, nullable=False, unique=True)
-    password = Column(String, nullable=False)
+    hashed_password = Column(String, nullable=False)
     confirm_password = Column(String, nullable=False)
     terms_and_conditions = Column(String, nullable=False)
     created_at = Column(String, server_default=func.now())
